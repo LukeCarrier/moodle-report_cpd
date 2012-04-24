@@ -64,3 +64,8 @@ $string["start"] = 'Start';
 $string["timetaken"] = 'Time Taken';
 $string["uniquestatus"] = 'Status name must be unique.';
 $string["year"] = 'Year';
+
+$string["cpdactivities"] = "CPD";
+$string["cpd:userview"] =  "View/Edit Activities";
+$string["cpd:adminview"] = "Development Report";
+$string["cpd:superadminview"] = "Settings";

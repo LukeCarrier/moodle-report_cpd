@@ -37,6 +37,7 @@ global $CFG, $USER, $DB;
 require_login($SITE);
 $systemcontext = get_context_instance(CONTEXT_SYSTEM);
 require_capability('report/cpd:userview', $systemcontext);
+
 $PAGE->set_url($CFG->dirroot.'/report/cpd/index.php');
 $PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
 $output = $PAGE->get_renderer('report_cpd');
