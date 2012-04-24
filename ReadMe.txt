@@ -8,8 +8,9 @@ Moodle 2.2
 
 How to install
 
-- Unzip the package
-- Drop the 'cpd' folder into admin/reports
+- Download and Unzip the package
+- Rename the package to "cpd" if it is not already (GitHub tarball/zip name may differ)
+- Drop the 'cpd' folder into /moodle/reports
 - Launch Moodle, login as admin to upgrade or instal the package as required
 - Click on Site Admin/Notifications
 
@@ -21,7 +22,7 @@ Please do not delete 'Objective Met' as when the status is changed to 'Objective
 
 User instructions
 
-The CPD Report menu item exists on the Site Administration menu for all users.
+The CPD Report menu item currently exists on the Site Administration menu for all users. (TODO: drop into user profile area instead)
 User is able to select the year they wish to view their CPD log for and update the year's log for themselves.
 Select CPD Year and click Add Activity
 The following fields can be added:
