@@ -24,6 +24,6 @@
  */
 
 
-$plugin->version  = 2012042300;
+$plugin->version  = 2012042601;
 $plugin->requires = 2010000000;  // Requires this Moodle version
 ?>

@@ -35,11 +35,19 @@ global $CFG, $USER, $DB;
 
 // Check permissions.
 require_login($SITE);
-$systemcontext = get_context_instance(CONTEXT_SYSTEM);
-require_capability('report/cpd:userview', $systemcontext);
+
+// not sure about context here. we want everyone to be able to do this anyway, so I'm skipping it until it makes sense to me ...
+// $systemcontext = get_context_instance(CONTEXT_SYSTEM);
+// require_capability('report/cpd:userview', $systemcontext);
+
+// doesn't seem to work; context_user returns false
+//$usercontext = get_context_instance(CONTEXT_USER);
+//require_capability('report/cpd:userview', $usercontext);
 
 $PAGE->set_url($CFG->dirroot.'/report/cpd/index.php');
-$PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
+// since we don't have a context don't set one here, should run in the default context
+// $PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
+//$PAGE->set_context($usercontext);
 $output = $PAGE->get_renderer('report_cpd');
 
 // Log request
