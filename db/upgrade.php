@@ -40,7 +40,7 @@ function xmldb_report_cpd_upgrade($oldversion = 0) {
 				);
 		
 		foreach ($statuses as $status) {
-			if (!record_exists('cpd_status', 'name', $status)) {
+			if (!$DB->record_exists('cpd_status', array('name' => $status))) {
 				$data = new stdClass;
 				$data->name = $status;
 				$result = $result && $DB->insert_record('cpd_status', $data, false);
@@ -89,7 +89,7 @@ function xmldb_report_cpd_upgrade($oldversion = 0) {
 				'Training course');
 		
 		foreach ($activity_types as $at) {
-			if (!record_exists('cpd_activity_type', 'name', $at)) {
+			if (!$DB->record_exists('cpd_activity_type', array('name' => $at))) {
 				$data = new stdClass;
 				$data->name = $at;
 				$result = $result && $DB->insert_record('cpd_activity_type', $data, false);
@@ -107,7 +107,7 @@ function xmldb_report_cpd_upgrade($oldversion = 0) {
 		
 		foreach ($cpd_years as $year) {
 			$year = (object) $year;
-			if (!record_exists('cpd_year', 'startdate', $year->startdate, 'enddate', $year->enddate)) {
+			if (!$DB->record_exists('cpd_year', array('startdate' => $year->startdate, 'enddate' => $year->enddate))) {
 				$result = $result && $DB->insert_record('cpd_year', $year, false);
 			}
 		}
