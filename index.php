@@ -80,7 +80,7 @@ if (!empty($download) || !empty($print)) {
         exit;
     }
 } else {
-    $columns['edit'] = get_string('edit');
+    $columns['edit']   = get_string('edit');
     $columns['delete'] = get_string('delete');
 }
 
@@ -107,9 +107,6 @@ if (empty($cpd_records)) {
 }
 
 if (empty($print)) {
-    // Print the header.
-    admin_externalpage_setup('cpdrecord');
-    // Include styles
     $printparams = array_merge((array) $filter_data, array('print' => 1));
     $printlink   = new moodle_url('/report/cpd/index.php', $printparams);
 
@@ -124,10 +121,9 @@ echo $OUTPUT->header();
 if (!empty($errors)) {
     echo html_writer::tag('div', implode('<br />' , $errors), array('class' => 'box errorbox errorboxcontent'));
 }
-//$filter->set_data();
+
 $filter->display();
 
-// Add activity button
 if ($cpd_years && $cpdyearid) {
     $buttonurl = new moodle_url('/report/cpd/edit_activity.php', array('cpdyearid' => $cpdyearid));
     echo $OUTPUT->single_button($buttonurl, get_string('addactivity', 'report_cpd'), 'get');
@@ -164,7 +160,6 @@ if (!empty($cpd_records)) {
 $table->finish_output();
 if ($table->started_output) {
     if (!empty($print)) {
-        // Disclaimer
         echo $output->disclaimer();
     }
 
