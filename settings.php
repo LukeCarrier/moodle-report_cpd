@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with CPD Report for Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * Defines the settings of this CPD Report
  *
@@ -22,16 +21,6 @@
  * @copyright 2010 Kineo open Source
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-$ADMIN->add(
-    'root',
-    new admin_externalpage(
-        'cpdrecord',
-        get_string('cpd', 'report_cpd'),
-        "$CFG->wwwroot/report/cpd/index.php",
-        'report/cpd:userview'
-    )
-);
 
 // The capability checks are required to avoid a debug error for non-admins
 $systemcontext = get_context_instance(CONTEXT_SYSTEM);

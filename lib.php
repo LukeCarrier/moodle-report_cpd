@@ -668,3 +668,17 @@ function process_activity_form(&$data, $redirect)
 	}
 	return $errors;
 }
+
+/*
+ * Extend the site navigation
+ *
+ * @return void
+ */
+function report_cpd_extend_navigation_user($navigation, $user, $course) {
+	// XXX: there's probably a tidier way to do this
+	$navigation = $GLOBALS['PAGE']->navigation;
+
+	$navnode = $navigation->add(get_string('cpd', 'report_cpd'),
+								new moodle_url('/report/cpd/index.php'),
+								navigation_node::NODETYPE_LEAF);
+}
