@@ -23,7 +23,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 /**
  * Returns CPD Report based on filter.
  *
@@ -36,6 +35,25 @@
 function get_cpd_records($filter = null, $editable = false, $extra = array(), &$returned = null)
 {
 	global $CFG, $USER, $DB, $OUTPUT;
+
+	/*
+	 * If we're editable, prepare some URLs and icons we'll need later
+	 */
+
+	$deleteicon = new action_link(new moodle_url('/report/cpd/index.php', array(
+		'delete'    => null,
+		'cpdyearid' => null,
+	)), new pix_icon('t/delete', get_string('delete')));
+
+	$editicon = new action_link(new moodle_url('/report/cpd/edit_activity.php', array(
+		'id'        => null,
+		'cpdyearid' => null,
+	)), new pix_icon('t/edit', get_string('edit')));
+
+	// Make sure we're working with an object, else we'll cause warnings later
+	if ($returned === null) {
+		$returned = new stdClass();
+	}
 
 	$sql = <<<EOS
 	SELECT
@@ -160,10 +178,12 @@ EOS;
 			}
 			array_push($row_data, $row->objective, $row->development_need, $row->activitytype, $row->activity, $duedate, $startdate, $enddate, $row->status, $timetaken);
 
-			if ($editable)
-			{
-				$row_data[] = "<a href=\"$CFG->wwwroot/report/cpd/edit_activity.php?id={$row->id}&cpdyearid={$row->cpdyearid}\"><img src=\"".$OUTPUT->pix_url('t/edit.gif')."\" alt=\"edit\" /></a>";
-				$row_data[] = "<a onclick=\"return confirm(".get_string('confirmdelete', 'report_cpd').");\" href=\"$CFG->wwwroot/report/cpd/index.php?delete={$row->id}&cpdyearid={$row->cpdyearid}\"><img src=\"".$OUTPUT->pix_url('t/delete.gif')."\" alt=\"delete\" /></a>";
+			if ($editable) {
+				$deleteicon->url->param('delete', $row->id);
+				$editicon->url->param('id', $row->id);
+
+				$row_data[] = $OUTPUT->render($editicon);
+				$row_data[] = $OUTPUT->render($deleteicon);
 			}
 			$table_data[] = $row_data;
 		}
