@@ -46,30 +46,30 @@ if ($delete_id = optional_param('delete', null, PARAM_INT)) {
 }
 
 $cpdyearid = optional_param('cpdyearid', null, PARAM_INT); // Current CPD year id
-$download = optional_param('download', null, PARAM_BOOL);
-$print = optional_param('print', null, PARAM_BOOL);
+$download  = optional_param('download', null, PARAM_BOOL);
+$print     = optional_param('print', null, PARAM_BOOL);
 
 // CPD Report headers
-$columns = array (
-    'objective' => get_string('objective', 'report_cpd'),
+$columns = array(
+    'objective'        => get_string('objective', 'report_cpd'),
     'development_need' => get_string('developmentneed', 'report_cpd'),
-    'activity_type' => get_string('activitytype', 'report_cpd'),
-    'activity' => get_string('activity', 'report_cpd'),
-    'due_date' => get_string('datedue', 'report_cpd'),
-    'start_date' => get_string('datestart', 'report_cpd'),
-    'end_date' => get_string('dateend', 'report_cpd'),
-    'status' => get_string('status', 'report_cpd'),
-    'timetaken' => get_string('timetaken', 'report_cpd')
+    'activity_type'    => get_string('activitytype', 'report_cpd'),
+    'activity'         => get_string('activity', 'report_cpd'),
+    'due_date'         => get_string('datedue', 'report_cpd'),
+    'start_date'       => get_string('datestart', 'report_cpd'),
+    'end_date'         => get_string('dateend', 'report_cpd'),
+    'status'           => get_string('status', 'report_cpd'),
+    'timetaken'        => get_string('timetaken', 'report_cpd')
 );
 
 if (!empty($download) || !empty($print)) {
-    // Filter object
-    $filter_data = new stdClass;
-    $filter_data->cpdyearid = $cpdyearid;
-    $filter_data->filterbydate = optional_param('filterbydate', null, PARAM_BOOL);
-    $filter_data->from = optional_param('from', null, PARAM_INT);
-    $filter_data->to = optional_param('to', null, PARAM_INT);
-    $filter_data->userid = $USER->id;
+    $filter_data = (object) array(
+        'cpdyearid'    => $cpdyearid,
+        'filterbydate' => optional_param('filterbydate', null, PARAM_BOOL),
+        'from'         => optional_param('from', null, PARAM_INT),
+        'to'           => optional_param('to', null, PARAM_INT),
+        'userid'       => $USER->id,
+    );
 
     if (($cpd_records = get_cpd_records($filter_data)) && !empty($download)) {
         // Add disclaimer
@@ -91,20 +91,19 @@ $filter = new cpd_filter_form('index.php', compact('cpd_years', 'userid'), 'post
 if (empty($cpd_records)) {
     $filter_data = $filter->get_data();
     if (empty($filter_data)) {
-        // Filter object
-        $filter_data = new stdClass;
-        $filter_data->userid = $USER->id;
-        $cpdyearid = empty($cpdyearid) ? get_current_cpd_year() : $cpdyearid;
-        $filter_data->cpdyearid = $cpdyearid; // Set cpd year id always needs to be set
-        $filter_data->from = null;
-        $filter_data->to = null;
+        $filter_data = (object) array(
+            'userid'    => $USER->id,
+            'cpdyearid' => empty($cpdyearid) ? get_current_cpd_year() : $cpdyearid, // Set cpd year id always needs to be set
+            'from'      => null,
+            'to'        => null,
+        );
     }
     if (!$errors = validate_filter($filter_data)) {
         $cpd_records = get_cpd_records($filter_data, true);
     }
     $filter->set_data(compact('cpdyearid'));
 } else {
-    $filter->set_data((array)$filter_data);
+    $filter->set_data((array) $filter_data);
 }
 
 $jsmodule = array(
@@ -117,8 +116,9 @@ if (empty($print)) {
     // Print the header.
     admin_externalpage_setup('cpdrecord');
     // Include styles
-    $printparams = (array)$filter_data + array('print' => 1);
-    $printlink = new moodle_url('/report/cpd/index.php', $printparams);
+    $printparams = array_merge((array) $filter_data, array('print' => 1));
+    $printlink   = new moodle_url('/report/cpd/index.php', $printparams);
+
     $PAGE->requires->string_for_js('printlandscape', 'report_cpd');
     $PAGE->requires->js_init_call('M.report_cpd.init', array(false, $printlink->out(false)));
 } else {
