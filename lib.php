@@ -72,15 +72,15 @@ function get_cpd_records($filter = null, $editable = false, $extra = array(), &$
 		u.firstname,
 		u.lastname
 	FROM
-		mdl_cpd c
+		{cpd} c
 	JOIN
-		{$CFG->prefix}user u
+		{user} u
 		ON c.userid = u.id
 	LEFT JOIN
-		{$CFG->prefix}cpd_activity_type att
+		{cpd_activity_type} att
 		ON c.activitytypeid = att.id
 	LEFT JOIN
-		{$CFG->prefix}cpd_status s
+		{cpd_status} s
 		ON c.statusid = s.id
 EOS;
 	$where = null;
