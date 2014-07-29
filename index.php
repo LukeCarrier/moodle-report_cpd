@@ -106,12 +106,6 @@ if (empty($cpd_records)) {
     $filter->set_data((array) $filter_data);
 }
 
-$jsmodule = array(
-    'name' => 'report_cpd',
-    'fullpath' => '/report/cpd/module.js',
-    'requires' => array('base', 'node')
-);
-
 if (empty($print)) {
     // Print the header.
     admin_externalpage_setup('cpdrecord');
