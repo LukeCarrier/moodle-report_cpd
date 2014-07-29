@@ -24,13 +24,14 @@
  */
 
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->dirroot.'/lib/tablelib.php');
-require_once "$CFG->libdir/formslib.php";
-require_once('cpd_filter_form.php');
-require_once('lib.php');
+require_once dirname(dirname(__DIR__)) . '/config.php';
 
+require_once "{$CFG->libdir}/adminlib.php";
+require_once "{$CFG->libdir}/tablelib.php";
+require_once "{$CFG->libdir}/formslib.php";
+
+require_once __DIR__ . '/cpd_filter_form.php';
+require_once __DIR__ . '/lib.php';
 
 // Check permissions.
 require_login($SITE);
