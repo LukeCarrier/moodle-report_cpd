@@ -31,7 +31,6 @@ require_once "$CFG->libdir/formslib.php";
 require_once('cpd_filter_form.php');
 require_once('lib.php');
 
-global $CFG, $USER, $DB;
 
 // Check permissions.
 require_login($SITE);
