@@ -22,8 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// The capability checks are required to avoid a debug error for non-admins
-$systemcontext = get_context_instance(CONTEXT_SYSTEM);
+$systemcontext = context_system::instance();
 if (has_capability('report/cpd:superadminview', $systemcontext)) {
     $ADMIN->add('modsettings',
         new admin_externalpage(
@@ -45,5 +44,3 @@ if (has_capability('report/cpd:adminview', $systemcontext)) {
         )
     );
 }
-
-?>
