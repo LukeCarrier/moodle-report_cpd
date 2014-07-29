@@ -33,25 +33,13 @@ require_once "{$CFG->libdir}/formslib.php";
 require_once __DIR__ . '/cpd_filter_form.php';
 require_once __DIR__ . '/lib.php';
 
-// Check permissions.
 require_login($SITE);
+$usercontext = context_user::instance($USER->id);
+require_capability('report/cpd:userview', $usercontext);
 
-// not sure about context here. we want everyone to be able to do this anyway, so I'm skipping it until it makes sense to me ...
-// $systemcontext = get_context_instance(CONTEXT_SYSTEM);
-// require_capability('report/cpd:userview', $systemcontext);
-
-// doesn't seem to work; context_user returns false
-//$usercontext = get_context_instance(CONTEXT_USER);
-//require_capability('report/cpd:userview', $usercontext);
-
+$PAGE->set_context($usercontext);
 $PAGE->set_url($CFG->dirroot.'/report/cpd/index.php');
-// since we don't have a context don't set one here, should run in the default context
-// $PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
-//$PAGE->set_context($usercontext);
 $output = $PAGE->get_renderer('report_cpd');
-
-// Log request
-add_to_log(SITEID, "admin", "report capability", "report/cpd/index.php");
 
 if ($delete_id = optional_param('delete', null, PARAM_INT)) {
     delete_cpd_record($delete_id);
