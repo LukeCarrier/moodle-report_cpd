@@ -85,26 +85,23 @@ function get_cpd_records($filter = null, $editable = false, $extra = array(), &$
 EOS;
 	$where = null;
 	$filter_sql = null;
-	if ($filter)
-	{
-		if (!empty($filter->userid))
-		{
+	if ($filter) {
+		if (!empty($filter->userid)) {
 			$where[] = "c.userid = {$filter->userid}";
 		}
-		if (!empty($filter->activitytypeid))
-		{
+
+		if (!empty($filter->activitytypeid)) {
 			$where[] = "c.activitytypeid = {$filter->activitytypeid}
 			";
 		}
-		if (!empty($filter->cpdyearid))
-		{
+
+		if (!empty($filter->cpdyearid)) {
 			$where[] = "c.cpdyearid = {$filter->cpdyearid}
 			";
 		}
-		if (!empty($filter->filterbydate) && (!empty($filter->from) || !empty($filter->to)))
-		{
-			if ($filter->from && empty($filter->to))
-			{
+
+		if (!empty($filter->filterbydate) && (!empty($filter->from) || !empty($filter->to))) {
+			if ($filter->from && empty($filter->to)) {
 				$where[] = "(
 				c.duedate >= {$filter->from}
 				or
@@ -113,9 +110,7 @@ EOS;
 				c.enddate >= {$filter->from}
 				)
 				";
-			}
-			else if ($filter->to && empty($filter->from))
-			{
+			} elseif ($filter->to && empty($filter->from)) {
 				$to = $filter->to + ((60 * 60 * 24) - 1);
 				$where[] = "(
 				c.duedate < {$to}
@@ -125,12 +120,9 @@ EOS;
 				c.enddate < {$to}
 				)
 				";
-			}
-			else if ($filter->from && $filter->to)
-			{
+			} elseif ($filter->from && $filter->to) {
 				$to = $filter->to + (60 * 60 * 24) - 1;
-				if ($filter->from < $to)
-				{
+				if ($filter->from < $to) {
 					$where[] = "(
 						(c.duedate >= {$filter->from} AND c.duedate <= {$to})
 						OR
@@ -143,8 +135,7 @@ EOS;
 			}
 		}
 	}
-	if (!is_null($where))
-	{
+	if (!is_null($where)) {
 		$filter_sql = " WHERE " . implode(" AND ", $where);
 		$sql .= $filter_sql;
 	}
@@ -155,12 +146,11 @@ EOS;
 		c.duedate,
 		c.id
 	";
+
 	$results = $DB->get_records_sql($sql);
 	$table_data = null;
-	if ($results)
-	{
-		foreach ($results as $row)
-		{
+	if ($results) {
+		foreach ($results as $row) {
 			$duedate = ($row->duedate) ? date("d-m-Y", $row->duedate) : '';
 			$startdate = ($row->startdate) ? date("d-m-Y", $row->startdate) : '';
 			$enddate = ($row->enddate) ? date("d-m-Y", $row->enddate) : '';
@@ -172,9 +162,8 @@ EOS;
 			}
 
 			$row_data = array();
-			if (isset($extra['user_name']) && $extra['user_name'])
-			{
-				$row_data[] = "$row->firstname $row->lastname";
+			if (isset($extra['user_name']) && $extra['user_name']) {
+				$row_data[] = fullname($row);
 			}
 			array_push($row_data, $row->objective, $row->development_need, $row->activitytype, $row->activity, $duedate, $startdate, $enddate, $row->status, $timetaken);
 
@@ -187,12 +176,10 @@ EOS;
 			}
 			$table_data[] = $row_data;
 		}
-		
-		// Set results count
+
 		$returned->result_count = count($results);
-		// Set user count
 		$returned->user_count = $DB->count_records_sql("
-				SELECT 	COUNT(*) 
+				SELECT 	COUNT(*)
 				FROM	mdl_cpd c
 				JOIN	{$CFG->prefix}user u
 					ON c.userid = u.id
@@ -201,7 +188,7 @@ EOS;
 					ON c.activitytypeid = att.id
 				LEFT JOIN
 					{$CFG->prefix}cpd_status s
-					ON c.statusid = s.id 
+					ON c.statusid = s.id
 				{$filter_sql}
 				GROUP BY
 					u.id");
@@ -282,7 +269,7 @@ function download_csv($filename, $headers, $data)
 function get_cpd_menu($name)
 {
 	global $DB;
-	
+
 	$cpd_menu = null;
 	switch ($name)
 	{
@@ -436,7 +423,7 @@ function process_meta_form($frm)
 			$endday = optional_param('endday','',PARAM_RAW);
 			$endmonth = optional_param('endmonth','',PARAM_RAW);
 			$endyear = optional_param('endyear','',PARAM_RAW);
-			
+
 			$starttime = strtotime("{$startday}-{$startmonth}-{$startyear}");
 			$endtime = strtotime("{$endday}-{$endmonth}-{$endyear}");
 
@@ -578,7 +565,7 @@ function change_display_order($table, $id, $move)
 		// Swap the order
 		$update_row2->display_order = $update_row1->display_order;
 		$update_row1->display_order = $new_display_order;
-		
+
 		$DB->update_record($table_name, $update_row1);
 		$DB->update_record($table_name, $update_row2);
 	}
@@ -621,11 +608,11 @@ function process_activity_form(&$data, $redirect)
 	global $USER, $CFG, $DB;
 
 	$data->userid = $USER->id;
-	
+
 	if (! $cpdyear = $DB->get_record('cpd_year', array('id'=>$data->cpdyearid))) {
 		error('Invalid CPD Year');
 	}
-	
+
 	if ($status = $DB->get_record('cpd_status', array('id'=>$data->statusid)))
 	{
 		if (strtoupper($status->name) == 'OBJECTIVE MET' && empty($data->enddate))
@@ -681,4 +668,3 @@ function process_activity_form(&$data, $redirect)
 	}
 	return $errors;
 }
-?>
